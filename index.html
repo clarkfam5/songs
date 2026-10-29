@@ -143,8 +143,12 @@ function render(){
 }
 ["q","sort","year","artist","kind"].forEach(id=>$(id).addEventListener(id==="q"?"input":"change",render));
 $("clear").addEventListener("click",()=>{["q","year","artist","kind"].forEach(id=>$(id).value="");render()});
-fetch("songs.json",{cache:"no-cache"}).then(r=>r.json()).then(d=>{
-  ROWS=d.songs||[];
+const getJSON=u=>fetch(u,{cache:"no-cache"}).then(r=>{if(!r.ok)throw r.status;return r.json()});
+Promise.all([getJSON("songs.json"),getJSON("https://api.github.com/repos/clarkfam5/songs/contents/updates").catch(()=>[])]).then(async([d,list])=>{
+  const ups=await Promise.all((Array.isArray(list)?list:[]).filter(f=>/\.json$/.test(f.name)).map(f=>getJSON("updates/"+f.name).catch(()=>null)));
+  const byId=new Map((d.songs||[]).map(r=>[r.id,r]));
+  for(const u of ups.filter(Boolean).sort((a,b)=>String(a.updated).localeCompare(String(b.updated)))){ (u.songs||[]).forEach(r=>byId.set(r.id,r)); (u.remove||[]).forEach(id=>byId.delete(id)); if(u.updated>d.updated) d.updated=u.updated; }
+  ROWS=[...byId.values()];
   const artists=[...new Set(ROWS.map(r=>r.artist).filter(Boolean))].sort((a,b)=>key(a).localeCompare(key(b)));
   fill("year",[...new Set(ROWS.map(r=>r.date.slice(0,4)))].sort().reverse());fill("artist",artists);
   $("stats").innerHTML='<div class="stat"><b>'+ROWS.length+'</b><small>Songs</small></div><div class="stat"><b>'+artists.length+'</b><small>Artists</small></div>';
