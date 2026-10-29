@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Song List | The Clark Family Creative</title>
+<meta name="description" content="Every song Colt Clark and the Quarantine Kids have posted on YouTube. Search by song, artist or year.">
+<link rel="icon" href="logo.webp">
+<meta property="og:title" content="Song List | The Clark Family Creative">
+<meta property="og:description" content="Every song Colt Clark and the Quarantine Kids have posted on YouTube.">
+<meta property="og:image" content="logo.webp">
+<style>
+/* Layout: one centered column in the style of a clean chat app. Logo on top, a big rounded search pill, soft gray pill filters, airy rows with rounded hover. Light only. */
+:root{
+  --bg:#ffffff; --fg:#0d0d0d; --muted:#5d5d5d; --faint:#8f8f8f; --line:#e5e5e5; --soft:#f4f4f4; --hover:#f7f7f8; --pill:#ececec;
+  --font:ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Roboto, Arial, sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:15px/1.5 var(--font);-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+html{padding-top:env(safe-area-inset-top,0px)}
+body{margin:0}
+.wrap{max-width:740px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 56px}
+header{display:grid;justify-items:center;text-align:center;gap:8px;padding-block:8px 18px}
+.logo{width:min(200px,54vw);height:auto;display:block}
+h1{font:600 28px/1.2 var(--font);letter-spacing:-.01em;margin:4px 0 0}
+.sub{color:var(--muted);margin:0;font-size:15px}
+.stats{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;font-variant-numeric:tabular-nums;margin-top:6px}
+.stat{background:var(--soft);border-radius:999px;padding:5px 12px;font-size:13px;color:var(--muted)}
+.stat b{color:var(--fg);font-weight:600;margin-right:4px}
+.stat small{font-size:13px}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:10px 8px;display:grid;gap:10px}
+.controls{display:flex;gap:8px;flex-wrap:wrap}
+.controls input[type=search]{flex:1 1 100%;order:-1}
+input[type=search]{font:16px var(--font);color:var(--fg);background:var(--soft);border:1px solid transparent;border-radius:26px;padding:13px 20px 13px 44px;width:100%;box-shadow:0 1px 2px rgba(0,0,0,.04);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' fill='none' stroke='%238f8f8f' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='8' cy='8' r='6'/%3E%3Cpath d='m13 13 4 4'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:18px 50%}
+input[type=search]:focus{background-color:var(--bg);border-color:var(--line);box-shadow:0 2px 10px rgba(0,0,0,.08);outline:none}
+input[type=search]::placeholder{color:var(--faint)}
+select{font:500 14px var(--font);color:var(--fg);background-color:var(--bg);border:1px solid var(--line);border-radius:999px;padding:7px 30px 7px 14px;min-width:0;max-width:100%;appearance:none;-webkit-appearance:none;cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none' stroke='%235d5d5d' stroke-width='1.6' stroke-linecap='round'%3E%3Cpath d='m1 1 4 4 4-4'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:calc(100% - 12px) 50%}
+select:hover{background-color:var(--hover)}
+.field{font:15px var(--font);color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:9px 12px;min-width:0;width:100%}
+.field:focus{outline:none;border-color:#b4b4b4}
+:focus-visible{outline:2px solid var(--fg);outline-offset:2px}
+.tabs{display:inline-flex;gap:2px;background:var(--soft);border-radius:999px;padding:3px;justify-self:start;flex-wrap:wrap}
+.tab{font:500 14px var(--font);border:0;background:transparent;color:var(--muted);padding:6px 14px;border-radius:999px;cursor:pointer}
+.tab[aria-pressed="true"]{background:var(--bg);color:var(--fg);box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.tab .n{color:var(--faint);margin-left:5px;font-variant-numeric:tabular-nums}
+.meta-line{display:flex;justify-content:space-between;gap:10px;color:var(--faint);font-size:13px;flex-wrap:wrap;padding-inline:4px}
+.linkbtn{background:none;border:0;color:var(--muted);text-decoration:underline;font:500 13px var(--font);cursor:pointer;padding:0}
+ul.list{list-style:none;margin:4px 0 0;padding:0;display:grid;gap:2px}
+.row{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;padding:10px;border-radius:14px;margin-inline:-10px}
+.row:hover{background:var(--hover)}
+.thumb{width:96px;aspect-ratio:16/9;border-radius:10px;overflow:hidden;background:var(--soft);display:block;max-width:100%}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ph{display:block;width:100%;height:100%;background:var(--soft)}
+@media (max-width:440px){.thumb{width:76px;border-radius:8px}.row{gap:12px}}
+.thumbbar{margin-top:10px}
+.thumbbar textarea{min-height:60px}
+.txt{min-width:0}
+.song{font-weight:600;font-size:15.5px;line-height:1.3;overflow-wrap:anywhere}
+.artist{color:var(--muted);font-size:14px;overflow-wrap:anywhere}
+.chips{display:flex;gap:5px;flex-wrap:wrap;margin-top:5px}
+.chip{font-size:12px;font-weight:500;padding:1px 9px;border-radius:999px;background:var(--pill);color:var(--fg)}
+.chip.orig{background:var(--fg);color:var(--bg)}
+.chip.ft{background:transparent;border:1px solid var(--line);color:var(--muted)}
+.right{text-align:right;font-variant-numeric:tabular-nums;color:var(--faint);font-size:13px;white-space:nowrap}
+.card{background:var(--bg);border:1px solid var(--line);border-radius:18px;padding:16px;margin-top:10px;display:grid;gap:12px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.card .why{font-size:13px;color:var(--fg);background:var(--soft);padding:7px 12px;border-radius:12px}
+.card .vt{font-size:13px;color:var(--muted);overflow-wrap:anywhere}
+.card .vt a{color:var(--muted)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid2 label{display:grid;gap:4px;font-size:12px;color:var(--muted);min-width:0}
+@media (max-width:520px){.grid2{grid-template-columns:1fr}}
+.actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.btn{font:500 14px var(--font);border-radius:999px;padding:9px 16px;cursor:pointer;border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.btn:hover{background:var(--hover)}
+.btn.primary{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.btn.primary:hover{background:#2f2f2f}
+.check{display:flex;gap:6px;align-items:center;font-size:14px}
+.empty{padding:48px 8px;text-align:center;color:var(--muted)}
+.empty h2{font:600 20px var(--font);color:var(--fg);margin:0 0 6px}
+textarea{width:100%;min-height:120px;font:12px ui-monospace,Menlo,monospace;color:var(--fg);background:var(--soft);border:1px solid transparent;border-radius:16px;padding:12px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));background:var(--fg);color:var(--bg);padding:10px 18px;border-radius:999px;font-weight:500;font-size:14px;z-index:20;box-shadow:0 4px 16px rgba(0,0,0,.15)}
+.foot{margin-top:28px;color:var(--faint);font-size:13px;display:flex;gap:12px;flex-wrap:wrap;justify-content:space-between;align-items:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <img class="logo" src="logo.webp" alt="The Clark Family Creative" width="400" height="382">
+    <h1>Song List</h1>
+    <p class="sub">Every song Colt Clark and the Quarantine Kids have posted on YouTube.</p>
+    <div class="stats" id="stats"></div>
+  </header>
+  <div class="bar">
+    <div class="controls">
+      <input type="search" id="q" placeholder="Search song, artist or guest" aria-label="Search">
+      <select id="sort" aria-label="Sort">
+        <option value="new">Newest first</option>
+        <option value="old">Oldest first</option>
+        <option value="song">Song A–Z</option>
+        <option value="artist">Artist A–Z</option>
+        <option value="views">Most viewed</option>
+      </select>
+      <select id="year" aria-label="Year"><option value="">All years</option></select>
+      <select id="artist" aria-label="Artist"><option value="">All artists</option></select>
+      <select id="kind" aria-label="Type">
+        <option value="">Covers & originals</option>
+        <option value="cover">Covers</option>
+        <option value="original">Originals</option>
+        <option value="live">Live shows</option>
+      </select>
+    </div>
+    <div class="meta-line"><span id="count">Loading songs…</span><button class="linkbtn" id="clear" hidden>Clear filters</button></div>
+  </div>
+  <ul class="list" id="list"></ul>
+  <div id="emptyState" class="empty" hidden><h2>No matches</h2><p>Try a different search or clear the filters.</p></div>
+  <div class="foot"><span id="updated"></span><span>New songs every Friday</span></div>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const key=s=>String(s||"").toLowerCase().replace(/^the\s+/,"").replace(/\(.*?\)/g,"").replace(/[^a-z0-9]/g,"");
+const fmtDate=d=>{const [y,m,dd]=d.split("-");return new Date(+y,+m-1,+dd).toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"})};
+const fmtViews=n=>n>=1e6?(n/1e6).toFixed(1).replace(/\.0$/,"")+"M":n>=1e3?Math.round(n/1e3)+"K":String(n||0);
+let ROWS=[];
+function fill(id,vals){const el=$(id),first=el.options[0].outerHTML;el.innerHTML=first+vals.map(v=>"<option>"+esc(v)+"</option>").join("")}
+function render(){
+  const q=key($("q").value),y=$("year").value,a=$("artist").value,k=$("kind").value,s=$("sort").value;
+  const f=ROWS.filter(r=>(!y||r.date.startsWith(y))&&(!a||r.artist===a)&&(k!=="cover"||!r.original)&&(k!=="original"||r.original)&&(k!=="live"||r.live)&&(!q||key(r.song+" "+r.artist+" "+r.featuring).includes(q)));
+  const cmp={new:(a,b)=>b.date.localeCompare(a.date),old:(a,b)=>a.date.localeCompare(b.date),song:(a,b)=>key(a.song).localeCompare(key(b.song)),artist:(a,b)=>key(a.artist).localeCompare(key(b.artist))||key(a.song).localeCompare(key(b.song)),views:(a,b)=>b.views-a.views}[s];
+  f.sort(cmp);
+  $("list").innerHTML=f.map(r=>{
+    const u="https://www.youtube.com/watch?v="+r.id;
+    let ch="";if(r.original)ch+='<span class="chip orig">Original</span>';if(r.live)ch+='<span class="chip">Live</span>';if(r.featuring)ch+='<span class="chip ft">ft. '+esc(r.featuring)+'</span>';
+    return '<li class="row"><a class="thumb" href="'+u+'" target="_blank" rel="noopener" aria-label="Watch '+esc(r.song)+' on YouTube"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/'+r.id+'/mqdefault.jpg"></a><div class="txt"><a class="song" href="'+u+'" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">'+esc(r.song)+'</a><div class="artist">'+esc(r.artist||"")+'</div>'+(ch?'<div class="chips">'+ch+'</div>':"")+'</div><div class="right">'+fmtDate(r.date)+'<br>'+fmtViews(r.views)+' views</div></li>';
+  }).join("");
+  $("count").textContent=f.length===ROWS.length?f.length+" songs":f.length+" of "+ROWS.length;
+  $("clear").hidden=!(q||y||a||k);
+  $("emptyState").hidden=!!f.length;
+}
+["q","sort","year","artist","kind"].forEach(id=>$(id).addEventListener(id==="q"?"input":"change",render));
+$("clear").addEventListener("click",()=>{["q","year","artist","kind"].forEach(id=>$(id).value="");render()});
+fetch("songs.json",{cache:"no-cache"}).then(r=>r.json()).then(d=>{
+  ROWS=d.songs||[];
+  const artists=[...new Set(ROWS.map(r=>r.artist).filter(Boolean))].sort((a,b)=>key(a).localeCompare(key(b)));
+  fill("year",[...new Set(ROWS.map(r=>r.date.slice(0,4)))].sort().reverse());fill("artist",artists);
+  $("stats").innerHTML='<div class="stat"><b>'+ROWS.length+'</b><small>Songs</small></div><div class="stat"><b>'+artists.length+'</b><small>Artists</small></div>';
+  if(d.updated){const [y,m,dd]=d.updated.split("-");$("updated").textContent="Updated "+new Date(+y,+m-1,+dd).toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"})}
+  render();
+}).catch(()=>{$("count").textContent="Couldn't load the song list. Refresh to try again."});
+</script>
+</body>
+</html>
